@@ -9,7 +9,7 @@ function renderSendForm() {
     <div class="send-message-container">
     <form id="send-form">
       <div class="form-row">
-        <label>To (sep by comma for more then one email): </label>
+        <label>To: </label>
         <input type="text" name="to" required>
       </div>
       <div class="form-row">

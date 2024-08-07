@@ -2,6 +2,7 @@ const MailMessage = require("../models/mailMessage");
 const FileSaver = require("../utils/fileSaver");
 const ColorsGenerator = require("../utils/colorsGenerator");
 const Common = require("../common");
+const { dialog, app, ipcRenderer } = require("electron");
 const messagesContainer = document.getElementById('messages');
 const messageContentContainer = document.getElementById('message-content');
 const menuIcons = document.querySelectorAll('.menu-icon');
@@ -59,7 +60,7 @@ return fetch(`https://s.yimg.com/lb/brands/180x180_${domain}.png`).then((r) => {
     }
 })
 }
-const emails_to_force_gravatar = ['zeon@saahild.com']
+const emails_to_force_gravatar = ['zeon@saahild.com', 'neon@saahild.com']
 async function getAvatar(email, forceGravatar = false) {
     if(forceGravatar || emails_to_force_gravatar.includes(email)) return convertEmailToGravatar(email)
     if(Object.entries(brands).find(([k,v]) => v.some(e=>e.includes(email.split('@')[1])))) return Object.entries(brands).find(([k,v]) => v.some(e=>e.includes(email.split('@')[1])))[0]
@@ -188,7 +189,35 @@ const buttonToGetPGPKey = document.createElement(`button`)
 buttonToGetPGPKey.innerHTML = `<i class="fa-solid fa-key"></i>`
 buttonToGetPGPKey.onclick = () => {
     const email_to_query = msg.fromEmail
-    alert(email_to_query)
+    // alert(email_to_query)
+    // ATM mit is down but all the others match sooo 
+    // ubuntu if found, get pgp key from https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xFDE995C28C7EE56337643A768A8B64515254CFC6
+    const urls = [`https://pgp.mit.edu/pks/lookup?search=EMAIL_HERE&op=index`,`https://keyserver.ubuntu.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`, `https://keys.openpgp.org/pks/lookup?search=EMAIL_HERE&op=index`, `https://keys.mailvelope.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`].map(e=>e.replace('EMAIL_HERE', encodeURIComponent(email_to_query)))
+let shouldIstop = false;
+    urls.forEach(async url => {
+    fetch(url).then(r => {
+        if(shouldIstop) return;
+        if(!r.ok) {
+            console.error(`No Key`)
+            alert(`No key found on ${new URL(url).host}`) //TODO Replace with notify
+            return;
+        }
+        r.text().then(t => {
+            if(shouldIstop) return;
+        shouldIstop = true;
+            const fingerprint = (t.split('\n')[1].split(':')[1])
+            // const a = document.createElement('a')
+            // a.download = true 
+            // a.href = `https://${new URL(url).host}/pks/lookup?op=get&search=0x${fingerprint}`
+            // document.body.append(a)
+            // a.click()
+            // a.remove()
+            // const filename = 
+ipcRenderer.invoke(`download-key`, fingerprint)
+            // console.log(filename)
+        })
+    })
+})
 }
 
     document.getElementById('email_actions').append(buttonToGetPGPKey)

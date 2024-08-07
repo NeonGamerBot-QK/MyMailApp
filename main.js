@@ -1,6 +1,6 @@
 require('electron-reload')(__dirname);
 
-const { app, BrowserWindow, ipcMain, nativeTheme, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, nativeTheme, Menu, dialog } = require('electron')
 const path = require('path')
 let mainWindow;
 let popup;
@@ -46,7 +46,20 @@ popup =null;
      })
        popup.loadFile('./html/settings.html')
 })
-
+ipcMain.handle('download-key', async fingerprint => {
+ const filename = await dialog.showOpenDialogSync({ 
+    properties: ['showHiddenFiles', 'openDirectory', 'dontAddToRecent'],
+    defaultPath: app.getPath('downloads') || app.getPath('home'),
+    title: 'Save pgp key',
+    // filters: [{
+    //     name: 'PGP key',
+    //     extensions: ['pgp', 'asc', '*']
+    // }],
+    // properties: ['showHiddenFiles', 'openDirectory','dontAddToRecent'],
+    // filters: []
+})
+console.log(filename)
+})
 ipcMain.handle(`account_switched`, () => {
   popup.close()
   mainWindow.focus()
