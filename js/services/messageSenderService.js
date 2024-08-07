@@ -1,10 +1,10 @@
-const Toastify = require('../utils/toaster');
-const smtpService = require('../services/smtpService');
+const Toastify = require('../utils/toaster')
+const smtpService = require('../services/smtpService')
 
-const messageContentContainer = document.getElementById('message-content');
-let editor;
+const messageContentContainer = document.getElementById('message-content')
+let editor
 
-function renderSendForm() {
+function renderSendForm () {
   messageContentContainer.innerHTML = `
     <div class="send-message-container">
     <form id="send-form">
@@ -27,40 +27,39 @@ function renderSendForm() {
     <button type="button" value="Send" id="send-email-btn">Send <i class="fa-solid fa-paper-plane"></i></button>
     </form>
   </div>
-    `;
+    `
 
-  document.getElementById('send-email-btn').onclick = sendEmail;
-  ClassicEditor.create(document.getElementById('ckeditor')).then(saveEditor);
+  document.getElementById('send-email-btn').onclick = sendEmail
+  ClassicEditor.create(document.getElementById('ckeditor')).then(saveEditor)
 }
 
-async function sendEmail() {
-  let emailForm = document.getElementById('send-form');
-  let message = Object.fromEntries(new FormData(emailForm));
-  let toastSettings = Toastify.getToastSettings();
+async function sendEmail () {
+  let emailForm = document.getElementById('send-form')
+  let message = Object.fromEntries(new FormData(emailForm))
+  let toastSettings = Toastify.getToastSettings()
 
-  message.textAsHtml = editor.getData() || "";
+  message.textAsHtml = editor.getData() || ''
 
   if (!emailForm.checkValidity()) {
-    emailForm.reportValidity();
-    return;
+    emailForm.reportValidity()
+    return
   }
 
-  toastSettings.text = "Sending Message...";
-  Toastify(toastSettings).showToast();
+  toastSettings.text = 'Sending Message...'
+  Toastify(toastSettings).showToast()
 
-  emailForm.reset();
-  editor.setData('');
-  await smtpService.sendSmtpMessage(message.to, message.subject, message.textAsHtml);
+  emailForm.reset()
+  editor.setData('')
+  await smtpService.sendSmtpMessage(message.to, message.subject, message.textAsHtml)
 
-  toastSettings.text = "Message was sent";
-  Toastify(toastSettings).showToast();
+  toastSettings.text = 'Message was sent'
+  Toastify(toastSettings).showToast()
 }
 
-function saveEditor(ckEditor) {
-  editor = ckEditor;
+function saveEditor (ckEditor) {
+  editor = ckEditor
 }
-
 
 module.exports = {
   renderSendForm
-};
+}
