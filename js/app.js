@@ -120,10 +120,10 @@ function onError(error) {
     console.log(error);
 }
 
-function onEmailClick(uid) {
+async function onEmailClick(uid) {
     let message = messages.find(msg => msg.uid === uid);
     if (message) {
-        emailRendererService.renderEmailInfo(currentBox, message, onDeleteClick, onSpamClick, onInboxClick);
+        await emailRendererService.renderEmailInfo(currentBox, message, onDeleteClick, onSpamClick, onInboxClick);
         if (!message.isSeen()) {
             imapService.markAsSeen(message.uid);
         }
