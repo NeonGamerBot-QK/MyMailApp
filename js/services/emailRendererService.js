@@ -50,13 +50,17 @@ function convertEmailToGravatar(email) {
     return `https://www.gravatar.com/avatar/${MD5(email.trim().toLowerCase())}?s=200&d=identicon`
 }
 async function getBrandAvatar(domain) {
-if(sessionStorage.get('brandavatar_'+domain)) return `https://s.yimg.com/lb/brands/180x180_${domain}.png`
-return fetch(`https://s.yimg.com/lb/brands/180x180_${domain}.png`).then((r) => {
-    if(!r.headers.get('Content-Type').includes('image/')) {
+if(sessionStorage.getItem('brandavatar_'+domain)) return `https://api.saahild.com/api/bimi/${domain}/icon`
+// if(sessionStorage.getItem('brandavatar_'+domain)) return `https://s.yimg.com/lb/brands/180x180_${domain}.png`
+// `https://s.yimg.com/lb/brands/180x180_${domain}.png`
+return fetch(`https://api.saahild.com/api/bimi/${domain}/icon`).then((r) => {
+    if(!r.ok) {
         throw new Error('Not valid...')
     } else { 
-        sessionStorage.set('brandavatar_'+domain, `https://s.yimg.com/lb/brands/180x180_${domain}.png`)
-        return `https://s.yimg.com/lb/brands/180x180_${domain}.png`
+        // sessionStorage.set('brandavatar_'+domain, `https://s.yimg.com/lb/brands/180x180_${domain}.png`)
+        sessionStorage.setItem('brandavatar_'+domain, `https://api.saahild.com/api/bimi/${domain}/icon`)
+        return `https://api.saahild.com/api/bimi/${domain}/icon`
+        // return `https://s.yimg.com/lb/brands/180x180_${domain}.png`
     }
 })
 }
@@ -65,8 +69,16 @@ async function getAvatar(email, forceGravatar = false) {
     if(forceGravatar || emails_to_force_gravatar.includes(email)) return convertEmailToGravatar(email)
     if(Object.entries(brands).find(([k,v]) => v.some(e=>e.includes(email.split('@')[1])))) return Object.entries(brands).find(([k,v]) => v.some(e=>e.includes(email.split('@')[1])))[0]
     try {
-return await getBrandAvatar(email.split('@')[1].split('.')[0])
+        const fem_splits = email.split('@')[1].split('.')
+        const fem = fem_splits.slice(fem_splits.length - 2).join('.')
+        console.log(fem)
+try {
+return await getBrandAvatar(fem)
 } catch (e) {
+    return await getBrandAvatar(email.split('@')[1]) // try full subdomain
+}
+    } catch (e) {
+    console.error(e)
     return convertEmailToGravatar(email)
 }
 }
