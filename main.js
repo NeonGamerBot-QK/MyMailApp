@@ -46,7 +46,7 @@ ipcMain.handle('settings_open', () => {
   })
   popup.loadFile('./html/settings.html')
 })
-ipcMain.handle('download-key', async fingerprint => {
+ipcMain.handle('download-key', async (_e, fingerprint) => {
   const filename = await dialog.showOpenDialogSync({
     properties: ['showHiddenFiles', 'openDirectory', 'dontAddToRecent'],
     defaultPath: app.getPath('downloads') || app.getPath('home'),
@@ -58,7 +58,10 @@ ipcMain.handle('download-key', async fingerprint => {
     // properties: ['showHiddenFiles', 'openDirectory','dontAddToRecent'],
     // filters: []
   })
-  console.log(filename)
+  // console.log(filename)
+  const folder = filename[0]
+  console.log(fingerprint, _e.fingerprint, _e)
+  require('child_process').execSync(`wget "${fingerprint}"`, {cwd: folder})
 })
 ipcMain.handle(`account_switched`, () => {
   popup.close()

@@ -225,7 +225,7 @@ let shouldIstop = false;
             // a.click()
             // a.remove()
             // const filename = 
-ipcRenderer.invoke(`download-key`, fingerprint)
+ipcRenderer.invoke(`download-key`, `https://${new URL(url).host}/pks/lookup?op=get&search=0x${fingerprint}`)
             // console.log(filename)
         })
     })
