@@ -74,12 +74,11 @@ function createWindow () {
     height: 750,
     minWidth: 1100,
     minHeight: 750,
-    frame: true,
     // transparent: false,
     // alwaysOnTop: true,
     focusable: true, // THIS IS THE KEY
     closable: true,
-    frame: false,
+    frame: process.platform == 'win32',
     skipTaskbar: true,
     // fullscreenable: false,
     // maximizable: false,
