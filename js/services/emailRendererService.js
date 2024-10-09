@@ -204,7 +204,7 @@ buttonToGetPGPKey.onclick = () => {
     // alert(email_to_query)
     // ATM mit is down but all the others match sooo 
     // ubuntu if found, get pgp key from https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xFDE995C28C7EE56337643A768A8B64515254CFC6
-    const urls = [`https://pgp.mit.edu/pks/lookup?search=EMAIL_HERE&op=index`,`https://keyserver.ubuntu.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`, `https://keys.openpgp.org/pks/lookup?search=EMAIL_HERE&op=index`, `https://keys.mailvelope.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`].map(e=>e.replace('EMAIL_HERE', encodeURIComponent(email_to_query)))
+    const urls = [`https://pgp.mit.edu/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`,`https://keyserver.ubuntu.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`, `https://keys.openpgp.org/pks/lookup?search=EMAIL_HERE&op=index`, `https://keys.mailvelope.com/pks/lookup?search=EMAIL_HERE&fingerprint=on&hash=on&exact=on&options=mr&op=index`].map(e=>e.replace('EMAIL_HERE', encodeURIComponent(email_to_query)))
 let shouldIstop = false;
     urls.forEach(async url => {
     fetch(url).then(r => {

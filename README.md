@@ -15,8 +15,8 @@
 - [X] Multi Accounts
 - [ ] PGP Signing/Decrypting
 - [ ] Custom Settings
-- - [ ] Custom CSS
-- - [ ] PGP Look up via [server1](https://pgp.mit.edu/) [server2](https://keyserver.ubuntu.com/) [server3](https://keys.openpgp.org/) [server4](https://keys.mailvelope.com)
+- - [x] Custom CSS
+- - [x] PGP Look up via [server1](https://pgp.mit.edu/) [server2](https://keyserver.ubuntu.com/) [server3](https://keys.openpgp.org/) [server4](https://keys.mailvelope.com)
 - [ ] Send message WIth PGP
 - [ ] OpenPGP decrypt
 <!-- ![](https://i.postimg.cc/nV2QkNTX/Screenshot-2023-06-19-at-18-47-56.png)

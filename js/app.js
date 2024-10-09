@@ -44,6 +44,10 @@ function initApp () {
     // window.open(`login.html`)
     ipcRenderer.invoke('add_acc')
   }
+  document.getElementById('settings-btn').onclick = () => {
+    // window.open(`login.html`)
+    ipcRenderer.invoke('settings_open')
+  }
   document.getElementById('switchacc-btn').onclick = () => {
     // window.open(`login.html`)
 // ipcRenderer.invoke('add_acc')
